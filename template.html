@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>  
+        <title>Tom's Movie DB</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="icon" type="image/ico" href="./img/favicon.ico">        
+        <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin" >
+        <link rel="stylesheet" type="text/css" href="./css/jquery-ui.css">
+        <link rel="stylesheet" type="text/css" href="./css/dataTables.jqueryui.css">
+        <link rel="stylesheet" type="text/css" href="./fancybox/jquery.fancybox.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="./fancybox/helpers/jquery.fancybox-buttons.css" />
+        <style> 
+                body { font-family: Ubuntu, sans-serif; } 
+                table, div { font-size: 10pt; } 
+                .title{ font-weight: bold; } 
+                #title { font-weight: bold; font-size: 30px;} 
+                #counter { font-weight: bold; font-size: 10px;}
+        </style>
+        <script type="text/javascript" language="javascript" src="./js/jquery-1.11.1.min.js"></script>
+        <script type="text/javascript" src="./fancybox/jquery.fancybox.js"></script>
+        <script type="text/javascript" src="./fancybox/helpers/jquery.fancybox-buttons.js"></script>
+        <script type="text/javascript" language="javascript" src="./js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" language="javascript" src="./js/date-uk.js"></script>
+        <script type="text/javascript" language="javascript" src="./js/dataTables.jqueryui.js"></script>
+        <script type="text/javascript" language="javascript" src="./js/moviedb.js"></script>
+    </head>
+    <body>
+        <p> 
+            <img src="./img/t_icon.jpg" width="75" height ="75" >
+            <span id="title" > Tom's Movie DB</span><span id="counter" >({{ counter }} and counting!)</span>
+        </p>
+        <table id="main" class="display" cellspacing="0" width="100%" >
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Title</th>
+                    <th>Year</th>
+                    <th>Runtime</th>
+                    <th>IMDB<br>Rating</th>
+                    <th>Tomato<br>Rating</th>
+                    <th>Genre</th>
+                    <th>Date<br>Added</th>
+                    <th>IMDB Link</th>
+                    <th>Plot (short)</th>
+                    <th>Plot (full)</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for movie in movies %}
+                <tr>
+                    <td>
+                        <a class="fancybox" href="{% if movie.data.Poster != 'N/A' %}{{ movie.data.Poster }}{% else %}no_image.png{% endif %}">
+                            <img src="{% if movie.data.Poster != 'N/A' %}{{ movie.data.Poster }}{% else %}no_image.png{% endif %}" height="100" alt="No Image" >
+                        </a>
+                    </td>
+                    <td class="title">{{ movie.name }}</td>
+                    <td>{{ movie.data.Year }}</td>
+                    <td>{{ movie.data.Runtime }}</td>
+                    <td>{{ movie.data.imdbRating }}</td>
+                    <td>{% if movie.data.tomatoRating != 'N/A' %}{{ movie.data.tomatoRating }}{% endif %}</td>
+                    <td>{{ movie.data.Genre }}</td>
+                    <td>{{ movie.date }}</td>
+                    <td>{% if movie.data.imdbID != '' %}<a href="http://www.imdb.com/title/{{ movie.data.imdbID }}/" target="_blank" >Link</a>{% else %}No Link{% endif %}</td>
+                    <td>{% if movie.short_plot() != '' %}{{ movie.short_plot() }}{% else %}No plot available{% endif %}</td>
+                    <td>Null</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html>

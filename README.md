@@ -4,4 +4,6 @@ This is a really simple Python script that reads the contents of a folder contai
 
 The page can be set to run locally on your machine or you can sync it to Dropbox, Github or Bitbucket to share unit with friends, using their basic web-hosting services. 
 
+It has a single dependency, jinja2 https://pypi.python.org/pypi/Jinja2, which provides the Django-esque templating.
+
 Enjoy!!
