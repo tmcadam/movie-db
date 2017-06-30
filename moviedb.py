@@ -4,19 +4,21 @@ from jinja2 import Template
 from movie import Movie
 
 # Some constants which could/should be passed in as arguments
-MOVIE_DIR = 'H:\Videos\Movies'
-#MOVIE_DIR = 'C:/Data/moviedb/test_movies'
+with open("MOVIE_DIR") as f:
+    MOVIE_DIR = f.read()
 TEMPLATE_FILE = 'template.html'
-CACHE_FILE = 'imdbCache.json'
-DATE_FILE = 'dateAdded.json'
-HTML_OUT = 'C:\Users\Tom\Dropbox\Public\Movies\index.html'
+CACHE_FILE = 'cache/imdbCache.json'
+DATE_FILE = 'cache/dateAdded.json'
+HTML_OUT = 'output/index.html'
+with open("API_KEY") as f:
+    API_KEY = f.read()
 CACHED_DAYS = 90
 
-# Generate a list of file names in the specified folder. 
+# Generate a list of file names in the specified folder.
 files = os.listdir(MOVIE_DIR)
 
 # Read the IMDB data cache. If it doesn't exist create a blank file and an empty dictionary to use.
-try: 
+try:
     with open(CACHE_FILE) as f: imdb_cache = json.load(f)
 except: 
     with open(CACHE_FILE, 'w') as f: f.write('{}')
@@ -33,7 +35,7 @@ counter = {'main':0, 'from_cache':0, 'error':0, 'updated_cache':0, 'by_search':0
 movies = [] # this will be the list of movie object that gets sent to the template.
 print '\nReading directory contents....\n'
 for file in files:
-    movie = Movie(file, MOVIE_DIR, CACHED_DAYS, CACHE_FILE, DATE_FILE, imdb_cache, date_cache)
+    movie = Movie(file, MOVIE_DIR, CACHED_DAYS, CACHE_FILE, DATE_FILE, API_KEY, imdb_cache, date_cache)
     if movie.status[0] in [1,2,3,4,5]:
         movies.append( movie )
         counter['main'] += 1

@@ -1,1 +1,7 @@
 *.pyc
+.env/
+.idea/
+output/
+/API_KEY
+cache/
+/MOVIE_DIR

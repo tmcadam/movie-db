@@ -11,7 +11,7 @@ class Movie:
     the file name and do some searching based on that.
     """
 
-    def __init__(self, filename, MOVIES_DIR, CACHED_DAYS, CACHE_FILE, DATE_FILE, imdb_cache, date_cache):
+    def __init__(self, filename, MOVIES_DIR, CACHED_DAYS, CACHE_FILE, DATE_FILE, API_KEY, imdb_cache, date_cache):
         self.status = None
         self.message = None
         # Set the class variables and constants using the init arguments.
@@ -19,6 +19,7 @@ class Movie:
         self.MOVIES_DIR = MOVIES_DIR
         self.CACHED_DAYS = CACHED_DAYS
         self.CACHE_FILE = CACHE_FILE
+        self.API_KEY = API_KEY
         self.DATE_FILE = DATE_FILE
         self.imdb_cache = imdb_cache
         self.date_cache = date_cache
@@ -132,7 +133,7 @@ class Movie:
                     self.status = (3, 'EXISTING: From CACHE (updated) - %s' % self.filename)
             # Get new data if not in cache or older than CACHED_DAYS.
             if self.status[0] in [3,4]:
-                url = 'http://www.omdbapi.com/?i=%s&plot=full&r=json&tomatoes=true' % self.imdb_id
+                url = 'http://www.omdbapi.com/?apikey=%s&i=%s&plot=full&r=json&tomatoes=true' % (self.API_KEY, self.imdb_id)
                 self.data = json.load(urllib2.urlopen(url, timeout=30))
         except:
             self.data = None
@@ -179,14 +180,15 @@ class Movie:
         urls = []
         year_str = 'y=%s' % self.year
         title_str = 't=%s' % self.name.replace(' ', '+')
-        urls.append((1, 'http://www.omdbapi.com/?%s&%s&plot=full&r=json&tomatoes=true' % (title_str, year_str)))
-        urls.append((2, 'http://www.omdbapi.com/?%s&plot=full&r=json&tomatoes=true' % title_str))
+        api_str = 'apikey=%s' % self.API_KEY
+        urls.append((1, 'http://www.omdbapi.com/?%s&%s&%s&plot=full&r=json&tomatoes=true' % (api_str, title_str, year_str)))
+        urls.append((2, 'http://www.omdbapi.com/?%s&%s&plot=full&r=json&tomatoes=true' % (api_str, title_str)))
         if '-' in self.name:
             names = self.name.split('-')
             title = self.name.replace(names[0] + '-', '').strip()
             title_str = 't=%s' % title.replace(' ', '+')
-            urls.append((3, 'http://www.omdbapi.com/?%s&%s&plot=full&r=json&tomatoes=true' % (title_str, year_str)))
-            urls.append((4, 'http://www.omdbapi.com/?%s&plot=full&r=json&tomatoes=true' % title_str))
+            urls.append((3, 'http://www.omdbapi.com/?%s&%s&%s&plot=full&r=json&tomatoes=true' % (api_str, title_str, year_str)))
+            urls.append((4, 'http://www.omdbapi.com/?%s&%s&plot=full&r=json&tomatoes=true' % (api_str, title_str)))
         return urls
 
     def short_plot(self):
@@ -236,7 +238,6 @@ class Movie:
                 m = re.split('\\.%s\\.' % self.year, self.filename)
                 if len(m) == 2:
                     self.name = m[0].strip().replace('.', ' ')
-            #self.message = None
 
     def set_ext(self):
         """
@@ -245,7 +246,7 @@ class Movie:
             Returns: Nothing
         """
         self.ext = os.path.splitext(self.filename)[1]
-        if self.ext not in ('.avi', '.mp4', '.mkv', '.divx','.mpg','.flv'):
+        if self.ext not in ('.avi', '.mp4', '.mkv', '.divx','.mpg','.flv', '.m4v'):
             self.ext = None
             self.message = 'ERROR: Invalid file type - %s' % self.filename
 
