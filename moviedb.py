@@ -12,6 +12,8 @@ DATE_FILE = 'cache/dateAdded.json'
 HTML_OUT = 'output/index.html'
 with open("API_KEY") as f:
     API_KEY = f.read()
+with open("REMOTE_LOCATION") as f:
+    REMOTE_LOCATION = f.read()
 CACHED_DAYS = 90
 
 # Generate a list of file names in the specified folder.
@@ -70,4 +72,6 @@ with open( TEMPLATE_FILE ) as file_template:
     with open(HTML_OUT, 'w') as file_out:
         file_out.write(html.encode('utf8'))
         print '\nHTML output successful'    
- 
+
+os.system('scp "%s" "%s"' % (HTML_OUT, REMOTE_LOCATION))
+print 'HTML upload successful'
