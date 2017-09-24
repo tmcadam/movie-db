@@ -37,24 +37,25 @@ counter = {'main':0, 'from_cache':0, 'error':0, 'updated_cache':0, 'by_search':0
 movies = [] # this will be the list of movie object that gets sent to the template.
 print '\nReading directory contents....\n'
 for file in files:
-    movie = Movie(file, MOVIE_DIR, CACHED_DAYS, CACHE_FILE, DATE_FILE, API_KEY, imdb_cache, date_cache)
-    if movie.status[0] in [1,2,3,4,5]:
-        movies.append( movie )
-        counter['main'] += 1
-        if movie.status[0] == 1:
-            counter['by_search'] += 1
+    if "Thumbs.db" not in file:
+        movie = Movie(file, MOVIE_DIR, CACHED_DAYS, CACHE_FILE, DATE_FILE, API_KEY, imdb_cache, date_cache)
+        if movie.status[0] in [1,2,3,4,5]:
+            movies.append( movie )
+            counter['main'] += 1
+            if movie.status[0] == 1:
+                counter['by_search'] += 1
+                print movie.status[1]
+            elif movie.status[0] == 2:
+                counter['from_cache'] += 1
+            elif movie.status[0] == 3:
+                counter['updated_cache'] += 1
+            elif movie.status[0] == 4:
+                counter['by_id'] += 1
+            elif movie.status[0] == 5:
+                counter['no_imdb'] += 1
+        else:
             print movie.status[1]
-        elif movie.status[0] == 2:
-            counter['from_cache'] += 1
-        elif movie.status[0] == 3:
-            counter['updated_cache'] += 1
-        elif movie.status[0] == 4:
-            counter['by_id'] += 1
-        elif movie.status[0] == 5: 
-            counter['no_imdb'] += 1
-    else:
-        print movie.status[1]
-        counter['error'] += 1
+            counter['error'] += 1
 
 print '\nTotal Files in Folder: %s' % len(files)
 print '\n%s Errors' % counter['error'] 
