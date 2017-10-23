@@ -15,7 +15,8 @@ class Movie:
         self.status = None
         self.message = None
         # Set the class variables and constants using the init arguments.
-        self.filename = filename
+        self.filename = os.path.split(filename)[1]
+        self.path = os.path.split(filename)[0]
         self.MOVIES_DIR = MOVIES_DIR
         self.CACHED_DAYS = CACHED_DAYS
         self.CACHE_FILE = CACHE_FILE
@@ -153,7 +154,7 @@ class Movie:
                 if data['Response'] == 'True':
                     self.data = data
                     self.imdb_id = self.data['imdbID']
-                    if self.clean_filename(self.MOVIES_DIR):
+                    if self.clean_filename(self.path):
                         self.message = 'NEW: From API (by SEARCH) %s (%s)= %s (%s) - %s' % (self.name,
                                 self.year,
                                 self.data['Title'],
