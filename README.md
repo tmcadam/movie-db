@@ -26,4 +26,7 @@ The generated page can be set to run locally on your machine or you can sync it 
 ## Usage
   * Change directory to the repo
   * Make sure the 3 settings files are configured (see Installation)
-  * ```python moviedb.py```
+  * Run the script
+    ```
+    python moviedb.py
+    ```
