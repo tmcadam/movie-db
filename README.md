@@ -1,6 +1,6 @@
 # MovieDB
 
-NB: This tool works, but requires some manual steps, and has no tests. A complete rework is under way at [movie-db2](https://github.com/tmcadam/movie-db2)
+NB: This tool works, but requires some manual steps, is complex and has no tests. A complete rework is under way at [movie-db2](https://github.com/tmcadam/movie-db2)
 
 A Python2 script that reads the contents of a folder containing movies, searches IMDB & Rotten Tomatoes for info on that movie, then creates a searchable/sortable single webpage using the [Datatables](https://datatables.net/
 ) jQuery plugin. Makes your movie collection super easy to search.
